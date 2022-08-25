@@ -37,6 +37,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Assets;
+import flash.system.System;
 
 using StringTools;
 typedef TitleData =
@@ -488,6 +489,12 @@ class TitleState extends MusicBeatState
 				
 				titleText.color = FlxColor.interpolate(titleTextColors[0], titleTextColors[1], timer);
 				titleText.alpha = FlxMath.lerp(titleTextAlphas[0], titleTextAlphas[1], timer);
+			}
+			
+			if(controls.BACK)
+			{
+				trace("Closing Game...");
+				System.exit(0);
 			}
 			
 			if(pressedEnter)

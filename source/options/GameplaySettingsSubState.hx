@@ -74,7 +74,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			"If checked, pressing Reset won't do anything.",
 			'noReset',
 			'bool',
-			false);
+			true);
 		addOption(option);
 
 		var option:Option = new Option('Hitsound Volume',
