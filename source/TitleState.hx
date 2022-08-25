@@ -640,11 +640,11 @@ class TitleState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
-					createCoolText("whoah this modification was made by...")
+					createCoolText(['This Modification is made by'], 15);
 				// credTextShit.visible = true;
 				case 4:
-					addMoreText("Mackery") //whoah this modification was made
-					addMoreText("Whynotboi")
+					addMoreText('Mackery', 15);
+					addMoreText('Whynotboi', 15);
 				// credTextShit.text += '\npresent...';
 				// credTextShit.addText();
 				case 5:
@@ -653,7 +653,11 @@ class TitleState extends MusicBeatState
 				// credTextShit.text = 'In association \nwith';
 				// credTextShit.screenCenter();
 				case 6:
+					#if PSYCH_WATERMARKS
+					createCoolText(['Not associated', 'with'], -40);
+					#else
 					createCoolText(['In association', 'with'], -40);
+					#end
 				case 8:
 					addMoreText('newgrounds', -40);
 					ngSpr.visible = true;
