@@ -166,6 +166,13 @@ class MainMenuState extends MusicBeatState
 		FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 		trace('Giving achievement "friday_night_play"');
 	}
+
+	// Unlocks "Supporter" achievemt
+	function giveSupporterAchievement() {
+		add(new AchievementObject('donate', camAchievement));
+		FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+		trace('Giving achievement "donate"');
+	}
 	#end
 
 	var selectedSomethin:Bool = false;
@@ -206,6 +213,15 @@ class MainMenuState extends MusicBeatState
 			{
 				if (optionShit[curSelected] == 'donate')
 				{
+					#if ACHIEVEMENTS_ALLOWED
+					Achievements.loadAchievements();
+					var achieveID:Int = Achievements.getAchievementIndex('donate');
+					if(!Achievements.isAchievementUnlocked(Achievements.achievementsStuff[achieveID][2])) { //Thx for supporting
+						Achievements.achievementsMap.set(Achievements.achievementsStuff[achieveID][2], true);
+						giveSupporterAchievement();
+						ClientPrefs.saveSettings();
+					}
+					#end
 					CoolUtil.browserLoad('https://ninja-muffin24.itch.io/funkin');
 				}
 				else

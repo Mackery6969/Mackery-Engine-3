@@ -5235,7 +5235,7 @@ class PlayState extends MusicBeatState
 							unlock = true;
 						}
 					case 'funny':
-						if(Paths.formatToSongPath(SONG.song) == 'ridge' && !usedPractice) {
+						if(Paths.formatToSongPath(SONG.song) == 'hot-diff' && !usedPractice) {
 							unlock = true;
 						}
 				}
