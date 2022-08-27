@@ -28,7 +28,10 @@ class Achievements {
 		["Just the Two of Us",			"Finish a Song pressing only two keys.",				'two_keys',				false],
 		["Toaster Gamer",				"Have you tried to run the game on a toaster?",			'toastie',				false],
 		["Debugger",					"Beat the \"Test\" Stage from the Chart Editor.",		'debugger',				 true],
-		['For the Funny',				"Beath the \"Hot Diff\" Stage from the Chart Editor.",	 'funny',			 	 true],
+		['For the Funny',				"Beat the \"Hot Diff\" Stage from the Chart Editor.",	'funny',			 	 true],
+		#if devBuild
+		['Beta Tester',					"Test the Beta Version of the Engine",					'beta_tester',			 true],
+		#end
 	];
 	public static var achievementsMap:Map<String, Bool> = new Map<String, Bool>();
 

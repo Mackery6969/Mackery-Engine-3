@@ -1188,6 +1188,18 @@ class PlayState extends MusicBeatState
 		scoreTxt.visible = !ClientPrefs.hideHud;
 		add(scoreTxt);
 
+		if(ClientPrefs.judgementCounter) {
+			judgementCounter = new FlxText(20, 0, 0, '', 20);
+			judgementCounter.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			judgementCounter.borderSize = 2;
+			judgementCounter.borderQuality = 2;
+			judgementCounter.scrollFactor.set();
+			judgementCounter.cameras = [camHUD];
+			judgementCounter.screenCenter(Y);
+			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\n';//\nTotal hit: ${totals}\n';
+			add(judgementCounter);
+		}
+
 		botplayTxt = new FlxText(400, timeBarBG.y + 55, FlxG.width - 800, "BOTPLAY", 32);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
@@ -5235,7 +5247,7 @@ class PlayState extends MusicBeatState
 							unlock = true;
 						}
 					case 'funny':
-						if(Paths.formatToSongPath(SONG.song) == 'hot-diff' && !usedPractice) {
+						if(Paths.formatToSongPath(SONG.song) == '' && !usedPractice) {
 							unlock = true;
 						}
 				}

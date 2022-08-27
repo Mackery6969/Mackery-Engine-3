@@ -143,6 +143,15 @@ class MainMenuState extends MusicBeatState
 
 		changeItem();
 
+		#if devBuild
+		var achieveID:Int = Achievements.getAchievementIndex('beta_tester');
+		if(!Achievements.isAchievementUnlocked(Achievements.achievementsStuff[achieveID][2])) { //It's a friday night. WEEEEEEEEEEEEEEEEEE
+			Achievements.achievementsMap.set(Achievements.achievementsStuff[achieveID][2], true);
+			giveBetaAchievement();
+			ClientPrefs.saveSettings();
+		}
+		#end
+
 		#if ACHIEVEMENTS_ALLOWED
 		Achievements.loadAchievements();
 		var leDate = Date.now();
@@ -173,6 +182,15 @@ class MainMenuState extends MusicBeatState
 		FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 		trace('Giving achievement "donate"');
 	}
+
+	#if devBuild
+	// Unlocks "Beta Tester" achievemt
+	function giveBetaAchievement() {
+		add(new AchievementObject('beta_tester', camAchievement));
+		FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+		trace('Giving achievement "beta_tester"');
+	}
+	#end
 	#end
 
 	var selectedSomethin:Bool = false;

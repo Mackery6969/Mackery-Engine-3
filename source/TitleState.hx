@@ -1,5 +1,6 @@
 package;
 
+import Achievements.AchievementObject;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -441,6 +442,11 @@ class TitleState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+
+		#if red
+		trace("im a cool dev");
+		#end
+
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
@@ -660,43 +666,51 @@ class TitleState extends MusicBeatState
 				// credTextShit.text = 'In association \nwith';
 				// credTextShit.screenCenter();
 				case 6:
+					#if official
+					createCoolText(['wow your using the official build'], 15);
+					#else
+					createCoolText(['Enjoy Modding!'], 15);
+					#end
+				case 8:
+					deleteCoolText();
+				case 9:
 					#if PSYCH_WATERMARKS
 					createCoolText(['Not associated', 'with'], -40);
 					#else
 					createCoolText(['In association', 'with'], -40);
 					#end
-				case 8:
+				case 10:
 					addMoreText('newgrounds', -40);
 					ngSpr.visible = true;
 				// credTextShit.text += '\nNewgrounds';
-				case 9:
+				case 11:
 					deleteCoolText();
 					ngSpr.visible = false;
 				// credTextShit.visible = false;
 
 				// credTextShit.text = 'Shoutouts Tom Fulp';
 				// credTextShit.screenCenter();
-				case 10:
+				case 12:
 					createCoolText([curWacky[0]]);
 				// credTextShit.visible = true;
-				case 12:
+				case 13:
 					addMoreText(curWacky[1]);
 				// credTextShit.text += '\nlmao';
-				case 13:
+				case 14:
 					deleteCoolText();
 				// credTextShit.visible = false;
 				// credTextShit.text = "Friday";
 				// credTextShit.screenCenter();
-				case 14:
+				case 15:
 					addMoreText('Friday');
 				// credTextShit.visible = true;
-				case 15:
+				case 16:
 					addMoreText('Night');
 				// credTextShit.text += '\nNight';
-				case 16:
+				case 17:
 					addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
 
-				case 17:
+				case 18:
 					skipIntro();
 			}
 		}
