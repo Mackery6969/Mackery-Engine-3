@@ -32,6 +32,7 @@ class ClientPrefs {
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
 	public static var judgementCounter:Bool = false;
+	public static var autoPause:Bool = true;
 	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
@@ -129,6 +130,7 @@ class ClientPrefs {
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
 		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.judgementCounter = judgementCounter;
+		FlxG.save.data.autoPause = autoPause;
 		FlxG.save.data.checkForUpdates = checkForUpdates;
 	
 		FlxG.save.flush();
@@ -244,6 +246,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.judgementCounter != null) {
 			judgementCounter = FlxG.save.data.judgementCounter;
+		}
+		if(FlxG.save.data.autoPause != null) {
+			autoPause = FlxG.save.data.autoPause;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{

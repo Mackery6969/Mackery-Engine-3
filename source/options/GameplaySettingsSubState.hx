@@ -145,6 +145,15 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		option.changeValue = 0.1;
 		addOption(option);
 
+		#if !html5
+		var option:Option = new Option('Auto Pause',
+			'If the game should automatically pause when tabbed out. (Reset required!)',
+			'autoPause',
+			'bool',
+			true);
+		addOption(option);
+		#end
+
 		super();
 	}
 
