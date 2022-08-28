@@ -32,6 +32,13 @@ class ClientPrefs {
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
 	public static var judgementCounter:Bool = false;
+	#if !html5
+	public static var autoPause:Bool = true;
+	public static var naughtiness:Bool = true;
+	#else
+	public static var autoPause:Bool = false;
+	public static var naughtiness:Bool = false;
+	#end
 	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
@@ -106,6 +113,7 @@ class ClientPrefs {
 		FlxG.save.data.framerate = framerate;
 		//FlxG.save.data.cursing = cursing;
 		//FlxG.save.data.violence = violence;
+		FlxG.save.data.naughtiness = naughtiness;
 		FlxG.save.data.camZooms = camZooms;
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
@@ -129,6 +137,7 @@ class ClientPrefs {
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
 		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.judgementCounter = judgementCounter;
+		FlxG.save.data.autoPause = autoPause;
 		FlxG.save.data.checkForUpdates = checkForUpdates;
 	
 		FlxG.save.flush();
@@ -187,6 +196,9 @@ class ClientPrefs {
 		if(FlxG.save.data.violence != null) {
 			violence = FlxG.save.data.violence;
 		}*/
+		if(FlxG.save.data.naughtiness != null) {
+			naughtiness = FlxG.save.data.naughtiness;
+		}
 		if(FlxG.save.data.camZooms != null) {
 			camZooms = FlxG.save.data.camZooms;
 		}
@@ -244,6 +256,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.judgementCounter != null) {
 			judgementCounter = FlxG.save.data.judgementCounter;
+		}
+		if(FlxG.save.data.autoPause != null) {
+			autoPause = FlxG.save.data.autoPause;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{

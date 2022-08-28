@@ -1798,7 +1798,11 @@ class PlayState extends MusicBeatState
 				cutsceneHandler.endTime = 12;
 				cutsceneHandler.music = 'DISTORTO';
 				precacheList.set('wellWellWell', 'sound');
-				precacheList.set('killYou', 'sound');
+				if (ClientPrefs.naughtiness) {
+					precacheList.set('killYou-naughty', 'sound');
+				} else {
+					precacheList.set('killYou', 'sound');
+				}
 				precacheList.set('bfBeep', 'sound');
 
 				var wellWellWell:FlxSound = new FlxSound().loadEmbedded(Paths.sound('wellWellWell'));
@@ -1838,7 +1842,11 @@ class PlayState extends MusicBeatState
 
 					// We should just kill you but... what the hell, it's been a boring day... let's see what you've got!
 					tankman.animation.play('killYou', true);
-					FlxG.sound.play(Paths.sound('killYou'));
+					if(ClientPrefs.naughtiness) {
+						FlxG.sound.play(Paths.sound('killYou-naughty'));
+					} else {
+						FlxG.sound.play(Paths.sound('killYou'));
+					}
 				});
 
 			case 'guns':
@@ -3759,6 +3767,7 @@ class PlayState extends MusicBeatState
 					});
 				}
 
+			#if !html5
 			case 'Set Property':
 				var killMe:Array<String> = value1.split('.');
 				if(killMe.length > 1) {
@@ -3766,6 +3775,7 @@ class PlayState extends MusicBeatState
 				} else {
 					FunkinLua.setVarInArray(this, value1, value2);
 				}
+			#end
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
@@ -4904,19 +4914,23 @@ class PlayState extends MusicBeatState
 	}
 
 	override function destroy() {
+		#if !html5
 		for (lua in luaArray) {
 			lua.call('onDestroy', []);
 			lua.stop();
 		}
 		luaArray = [];
+		#end
 
 		if(!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
+		#if !html5
 		#if hscript
 		FunkinLua.haxeInterp = null;
+		#end
 		#end
 		super.destroy();
 	}
@@ -5102,10 +5116,12 @@ class PlayState extends MusicBeatState
 	}
 
 	public function setOnLuas(variable:String, arg:Dynamic) {
+		#if !html5
 		#if LUA_ALLOWED
 		for (i in 0...luaArray.length) {
 			luaArray[i].set(variable, arg);
 		}
+		#end
 		#end
 	}
 
@@ -5172,6 +5188,9 @@ class PlayState extends MusicBeatState
 		setOnLuas('rating', ratingPercent);
 		setOnLuas('ratingName', ratingName);
 		setOnLuas('ratingFC', ratingFC);
+		if (ClientPrefs.judgementCounter) {
+			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\n';//\nTotal hit: ${totals}\n;
+		}
 	}
 
 	#if ACHIEVEMENTS_ALLOWED
