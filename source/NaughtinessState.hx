@@ -11,7 +11,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 
-class FlashingState extends MusicBeatState
+class NaughtinessState extends MusicBeatState
 {
 	public static var leftState:Bool = false;
 
@@ -25,7 +25,7 @@ class FlashingState extends MusicBeatState
 
 		warnText = new FlxText(0, 0, FlxG.width,
 			"Hey, watch out!\n
-			This Mod contains some flashing lights!\n
+			This Mod contains some Cursing and Violence!\n
 			Press ENTER to disable them now or go to Options Menu.\n
 			Press ESCAPE to ignore this message.\n
 			You've been warned!",
@@ -44,22 +44,12 @@ class FlashingState extends MusicBeatState
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
 				if(!back) {
-					ClientPrefs.flashing = false;
+					ClientPrefs.naughtiness = false;
 					ClientPrefs.saveSettings();
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 					FlxFlicker.flicker(warnText, 1, 0.1, false, true, function(flk:FlxFlicker) {
 						new FlxTimer().start(0.5, function (tmr:FlxTimer) {
-							#if !html5
-							if(FlxG.save.data.naughtiness == null && !NaughtinessState.leftState) {
-								FlxTransitionableState.skipNextTransIn = true;
-								FlxTransitionableState.skipNextTransOut = true;
-								MusicBeatState.switchState(new NaughtinessState());
-							} else {
-								MusicBeatState.switchState(new TitleState());
-							}
-							#else
-							MusicBeatState.switchState(new TitleState);
-							#end
+							MusicBeatState.switchState(new TitleState());
 						});
 					});
 				} else {
