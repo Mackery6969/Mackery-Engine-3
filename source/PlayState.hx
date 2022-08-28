@@ -1798,7 +1798,11 @@ class PlayState extends MusicBeatState
 				cutsceneHandler.endTime = 12;
 				cutsceneHandler.music = 'DISTORTO';
 				precacheList.set('wellWellWell', 'sound');
-				precacheList.set('killYou', 'sound');
+				if (ClientPrefs.naughtiness) {
+					precacheList.set('killYou-naughty', 'sound');
+				} else {
+					precacheList.set('killYou', 'sound');
+				}
 				precacheList.set('bfBeep', 'sound');
 
 				var wellWellWell:FlxSound = new FlxSound().loadEmbedded(Paths.sound('wellWellWell'));
@@ -1838,7 +1842,11 @@ class PlayState extends MusicBeatState
 
 					// We should just kill you but... what the hell, it's been a boring day... let's see what you've got!
 					tankman.animation.play('killYou', true);
-					FlxG.sound.play(Paths.sound('killYou'));
+					if(ClientPrefs.naughtiness) {
+						FlxG.sound.play(Paths.sound('killYou-naughty'));
+					} else {
+						FlxG.sound.play(Paths.sound('killYou'));
+					}
 				});
 
 			case 'guns':

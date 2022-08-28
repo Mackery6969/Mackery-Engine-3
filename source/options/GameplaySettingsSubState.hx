@@ -154,6 +154,19 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
+		#if !html5
+		var option:Option = new Option('Naughtiness',
+			'cursing/violence (WIP)',
+			'naughtiness',
+			'bool',
+			#if html5
+			false);
+			#else
+			true);
+			#end
+		addOption(option);
+		#end
+
 		super();
 	}
 

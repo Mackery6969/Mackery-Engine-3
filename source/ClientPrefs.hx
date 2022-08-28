@@ -33,6 +33,7 @@ class ClientPrefs {
 	public static var pauseMusic:String = 'Tea Time';
 	public static var judgementCounter:Bool = false;
 	public static var autoPause:Bool = true;
+	public static var naughtiness:Bool = true;
 	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
@@ -107,6 +108,7 @@ class ClientPrefs {
 		FlxG.save.data.framerate = framerate;
 		//FlxG.save.data.cursing = cursing;
 		//FlxG.save.data.violence = violence;
+		FlxG.save.data.naughtiness = naughtiness;
 		FlxG.save.data.camZooms = camZooms;
 		FlxG.save.data.noteOffset = noteOffset;
 		FlxG.save.data.hideHud = hideHud;
@@ -189,6 +191,9 @@ class ClientPrefs {
 		if(FlxG.save.data.violence != null) {
 			violence = FlxG.save.data.violence;
 		}*/
+		if(FlxG.save.data.naughtiness != null) {
+			naughtiness = FlxG.save.data.naughtiness;
+		}
 		if(FlxG.save.data.camZooms != null) {
 			camZooms = FlxG.save.data.camZooms;
 		}
