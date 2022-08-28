@@ -49,10 +49,12 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
 				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+			#if !html5
 			case 'Reset Game':
 				trace("game reset");
 				FlxG.save.erase();
 				System.exit(0);
+			#end
 		}
 	}
 

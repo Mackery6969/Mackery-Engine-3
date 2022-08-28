@@ -32,8 +32,13 @@ class ClientPrefs {
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
 	public static var judgementCounter:Bool = false;
+	#if !html5
 	public static var autoPause:Bool = true;
 	public static var naughtiness:Bool = true;
+	#else
+	public static var autoPause:Bool = false;
+	public static var naughtiness:Bool = false;
+	#end
 	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,

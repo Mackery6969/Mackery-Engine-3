@@ -68,6 +68,7 @@ class FunkinLua {
 	public var scriptName:String = '';
 	public var closed:Bool = false;
 
+	#if !html5
 	#if hscript
 	public static var haxeInterp:Interp = null;
 	#end
@@ -3188,10 +3189,12 @@ class FunkinLua {
 	{
 		return PlayState.instance.isDead ? GameOverSubstate.instance : PlayState.instance;
 	}
+	#end
 }
 
 class ModchartSprite extends FlxSprite
 {
+	#if !html5
 	public var wasAdded:Bool = false;
 	public var animOffsets:Map<String, Array<Float>> = new Map<String, Array<Float>>();
 	//public var isInFront:Bool = false;
@@ -3201,10 +3204,12 @@ class ModchartSprite extends FlxSprite
 		super(x, y);
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
+	#end
 }
 
 class ModchartText extends FlxText
 {
+	#if !html5
 	public var wasAdded:Bool = false;
 	public function new(x:Float, y:Float, text:String, width:Float)
 	{
@@ -3214,10 +3219,12 @@ class ModchartText extends FlxText
 		scrollFactor.set();
 		borderSize = 2;
 	}
+	#end
 }
 
 class DebugLuaText extends FlxText
 {
+	#if !html5
 	private var disableTime:Float = 6;
 	public var parentGroup:FlxTypedGroup<DebugLuaText>;
 	public function new(text:String, parentGroup:FlxTypedGroup<DebugLuaText>, color:FlxColor) {
@@ -3234,4 +3241,5 @@ class DebugLuaText extends FlxText
 		if(disableTime < 0) disableTime = 0;
 		if(disableTime < 1) alpha = disableTime;
 	}
+	#end
 }

@@ -3767,6 +3767,7 @@ class PlayState extends MusicBeatState
 					});
 				}
 
+			#if !html5
 			case 'Set Property':
 				var killMe:Array<String> = value1.split('.');
 				if(killMe.length > 1) {
@@ -3774,6 +3775,7 @@ class PlayState extends MusicBeatState
 				} else {
 					FunkinLua.setVarInArray(this, value1, value2);
 				}
+			#end
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
@@ -4912,19 +4914,23 @@ class PlayState extends MusicBeatState
 	}
 
 	override function destroy() {
+		#if !html5
 		for (lua in luaArray) {
 			lua.call('onDestroy', []);
 			lua.stop();
 		}
 		luaArray = [];
+		#end
 
 		if(!ClientPrefs.controllerMode)
 		{
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
+		#if !html5
 		#if hscript
 		FunkinLua.haxeInterp = null;
+		#end
 		#end
 		super.destroy();
 	}
@@ -5110,10 +5116,12 @@ class PlayState extends MusicBeatState
 	}
 
 	public function setOnLuas(variable:String, arg:Dynamic) {
+		#if !html5
 		#if LUA_ALLOWED
 		for (i in 0...luaArray.length) {
 			luaArray[i].set(variable, arg);
 		}
+		#end
 		#end
 	}
 
