@@ -184,5 +184,5 @@ jobs:
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
-          name: html5Build
+          name: HTML5Build
           path: export/release/html5/bin

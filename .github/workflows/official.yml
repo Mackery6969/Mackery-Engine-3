@@ -139,7 +139,7 @@ jobs:
         with:
           name: macBuild
           path: export/release/macos/bin
-buildHTML5:
+  buildHTML5:
     runs-on: windows-latest
 
     steps:
@@ -179,5 +179,5 @@ buildHTML5:
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
-          name: html5Build
+          name: HTML5Build
           path: export/release/html5/bin
