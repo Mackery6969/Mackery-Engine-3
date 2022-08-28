@@ -144,7 +144,7 @@ jobs:
         with:
           name: macBuild
           path: export/release/macos/bin
-buildHTML5:
+  buildHTML5:
     runs-on: windows-latest
 
     steps:
