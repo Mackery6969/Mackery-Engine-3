@@ -1,3 +1,18 @@
+# Friday Night Funkin' - Mackery Engine
+Engine used for Vs Mackery, a optimization to [Psych Engine](https://gamebanana.com/mods/309789) that adds some things that just felt like belongs.
+
+## Features
+There is a ton of added features to this Engine and I will go over them.
+
+### Gameplay
+Not Much Gameplay wise but a few extra stuff
+
+ * Judgement Counter (counts your sicks, goods, bads, and shits)
+ * Naughtiness option (that works!)  (temporarely for ugh, I dunno for week 5 because I cant draw...)
+ * fixed the HTML5 Bug!
+
+Made by Mackery (Thats Me!)
+
 # Friday Night Funkin' - Psych Engine
 Engine originally used on [Mind Games Mod](https://gamebanana.com/mods/301107), intended to be a fix for the vanilla version's many issues while keeping the casual play aspect of it. Also aiming to be an easier alternative to newbie coders.
 
