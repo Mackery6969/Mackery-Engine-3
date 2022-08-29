@@ -20,3 +20,4 @@ export/*
 !.vscode/launch.json
 !.vscode/extensions.json
 .vscode-project.hxml
+vscode-project.hxml
