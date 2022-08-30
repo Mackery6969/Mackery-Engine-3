@@ -65,7 +65,7 @@
 	</section>
 
 	<!-- DONT ENABLE THIS --> <!-- TOO BAD LOSER -->
-	<define name="CHECK_FOR_UPDATES" if="desktop official"/>
+	<define name="CHECK_FOR_UPDATES" if="desktop officialBuild"/>
 
 	<!-- <define name="PRELOAD_ALL" /> -->
 	<define name="PRELOAD_ALL" unless="web" />
