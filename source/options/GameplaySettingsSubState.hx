@@ -154,7 +154,6 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
-		#if !html5
 		var option:Option = new Option('Naughtiness',
 			'cursing/violence (WIP)',
 			'naughtiness',
@@ -165,7 +164,13 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			true);
 			#end
 		addOption(option);
-		#end
+
+		var option:Option = new Option('Freeplay Cutscenes',
+			'If cutscenes should play in freeplay',
+			'freeplayCutscenes',
+			'bool',
+			false);
+		addOption(option);
 
 		super();
 	}

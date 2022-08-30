@@ -197,6 +197,9 @@ class PlayState extends MusicBeatState
 	public var instakillOnMiss:Bool = false;
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
+	public var fragileFunkin:Bool = false;
+
+	var poisonTimes:Int = 0;
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
@@ -370,6 +373,7 @@ class PlayState extends MusicBeatState
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill', false);
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
+		fragileFunkin = ClientPrefs.getGameplaySetting('fragile funkin', false);
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -422,13 +426,13 @@ class PlayState extends MusicBeatState
 			{
 				case 'spookeez' | 'south' | 'monster':
 					curStage = 'spooky';
-				case 'pico' | 'blammed' | 'philly' | 'philly-nice':
+				case 'pico' | 'blammed' | 'philly' | 'philly nice':
 					curStage = 'philly';
-				case 'milf' | 'satin-panties' | 'high':
+				case 'milf' | 'satin panties' | 'high':
 					curStage = 'limo';
 				case 'cocoa' | 'eggnog':
 					curStage = 'mall';
-				case 'winter-horrorland':
+				case 'winter horrorland':
 					curStage = 'mallEvil';
 				case 'senpai' | 'roses':
 					curStage = 'school';
@@ -1263,74 +1267,77 @@ class PlayState extends MusicBeatState
 		#end
 
 		var daSong:String = Paths.formatToSongPath(curSong);
-		if (isStoryMode && !seenCutscene)
+		if (isStoryMode || ClientPrefs.freeplayCutscenes)
 		{
-			switch (daSong)
+			if (!seenCutscene) 
 			{
-				case "monster":
-					var whiteScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
-					add(whiteScreen);
-					whiteScreen.scrollFactor.set();
-					whiteScreen.blend = ADD;
-					camHUD.visible = false;
-					snapCamFollowToPos(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-					inCutscene = true;
+				switch (daSong)
+				{
+					case "monster":
+						var whiteScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
+						add(whiteScreen);
+						whiteScreen.scrollFactor.set();
+						whiteScreen.blend = ADD;
+						camHUD.visible = false;
+						snapCamFollowToPos(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+						inCutscene = true;
 
-					FlxTween.tween(whiteScreen, {alpha: 0}, 1, {
-						startDelay: 0.1,
-						ease: FlxEase.linear,
-						onComplete: function(twn:FlxTween)
-						{
-							camHUD.visible = true;
-							remove(whiteScreen);
-							startCountdown();
-						}
-					});
-					FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
-					if(gf != null) gf.playAnim('scared', true);
-					boyfriend.playAnim('scared', true);
-
-				case "winter-horrorland":
-					var blackScreen:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
-					add(blackScreen);
-					blackScreen.scrollFactor.set();
-					camHUD.visible = false;
-					inCutscene = true;
-
-					FlxTween.tween(blackScreen, {alpha: 0}, 0.7, {
-						ease: FlxEase.linear,
-						onComplete: function(twn:FlxTween) {
-							remove(blackScreen);
-						}
-					});
-					FlxG.sound.play(Paths.sound('Lights_Turn_On'));
-					snapCamFollowToPos(400, -2050);
-					FlxG.camera.focusOn(camFollow);
-					FlxG.camera.zoom = 1.5;
-
-					new FlxTimer().start(0.8, function(tmr:FlxTimer)
-					{
-						camHUD.visible = true;
-						remove(blackScreen);
-						FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
-							ease: FlxEase.quadInOut,
+						FlxTween.tween(whiteScreen, {alpha: 0}, 1, {
+							startDelay: 0.1,
+							ease: FlxEase.linear,
 							onComplete: function(twn:FlxTween)
 							{
+								camHUD.visible = true;
+								remove(whiteScreen);
 								startCountdown();
 							}
 						});
-					});
-				case 'senpai' | 'roses' | 'thorns':
-					if(daSong == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
-					schoolIntro(doof);
+						FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
+						if(gf != null) gf.playAnim('scared', true);
+						boyfriend.playAnim('scared', true);
 
-				case 'ugh' | 'guns' | 'stress':
-					tankIntro();
+					case "winter-horrorland":
+						var blackScreen:FlxSprite = new FlxSprite().makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+						add(blackScreen);
+						blackScreen.scrollFactor.set();
+						camHUD.visible = false;
+						inCutscene = true;
 
-				default:
-					startCountdown();
+						FlxTween.tween(blackScreen, {alpha: 0}, 0.7, {
+							ease: FlxEase.linear,
+							onComplete: function(twn:FlxTween) {
+								remove(blackScreen);
+							}
+						});
+						FlxG.sound.play(Paths.sound('Lights_Turn_On'));
+						snapCamFollowToPos(400, -2050);
+						FlxG.camera.focusOn(camFollow);
+						FlxG.camera.zoom = 1.5;
+
+						new FlxTimer().start(0.8, function(tmr:FlxTimer)
+						{
+							camHUD.visible = true;
+							remove(blackScreen);
+							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
+								ease: FlxEase.quadInOut,
+								onComplete: function(twn:FlxTween)
+								{
+									startCountdown();
+								}
+							});
+						});
+					case 'senpai' | 'roses' | 'thorns':
+						if(daSong == 'roses') FlxG.sound.play(Paths.sound('ANGRY'));
+						schoolIntro(doof);
+
+					case 'ugh' | 'guns' | 'stress':
+						tankIntro();
+
+					default:
+						startCountdown();
+				}
+				seenCutscene = true;
 			}
-			seenCutscene = true;
 		}
 		else
 		{
@@ -3047,7 +3054,7 @@ class PlayState extends MusicBeatState
 		if (health > 2)
 			health = 2;
 
-		if (healthBar.percent < 20)
+		if (healthBar.percent < 20 || poisonTimes > 0)
 			iconP1.animation.curAnim.curFrame = 1;
 		else
 			iconP1.animation.curAnim.curFrame = 0;
@@ -3903,7 +3910,7 @@ class PlayState extends MusicBeatState
 		if(achievementObj != null) {
 			return;
 		} else {
-			var achieve:String = checkForAchievement(['week1_nomiss', 'week2_nomiss', 'week3_nomiss', 'week4_nomiss',
+			var achieve:String = checkForAchievement(['tutorial_nomiss', 'week1_nomiss', 'week2_nomiss', 'week3_nomiss', 'week4_nomiss',
 				'week5_nomiss', 'week6_nomiss', 'week7_nomiss', 'ur_bad',
 				'ur_good', 'hype', 'two_keys', 'toastie', 'debugger', 'funny']);
 
@@ -4478,6 +4485,21 @@ class PlayState extends MusicBeatState
 		//trace(daNote.missHealth);
 		songMisses++;
 		vocals.volume = 0;
+		if(fragileFunkin == true && poisonTimes < 3) {
+			trace('poison hit!');
+			poisonTimes += 1;
+			var poisonPlusTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
+			{
+				health -= 0.04;
+			}, 0);
+			// stop timer after 3 seconds
+			new FlxTimer().start(3, function(tmr:FlxTimer)
+			{
+				trace('stop');
+				poisonPlusTimer.cancel();
+				poisonTimes -= 1;
+			});
+		}
 		if(!practiceMode) songScore -= 10;
 
 		totalPlayed++;
@@ -4539,6 +4561,21 @@ class PlayState extends MusicBeatState
 				boyfriend.playAnim(singAnimations[Std.int(Math.abs(direction))] + 'miss', true);
 			}
 			vocals.volume = 0;
+			if(fragileFunkin == true && poisonTimes < 3) {
+				trace('poison hit!');
+				poisonTimes += 1;
+				var poisonPlusTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
+				{
+					health -= 0.04;
+				}, 0);
+				// stop timer after 3 seconds
+				new FlxTimer().start(3, function(tmr:FlxTimer)
+				{
+					trace('stop');
+					poisonPlusTimer.cancel();
+					poisonTimes -= 1;
+				});
+			}
 		}
 		callOnLuas('noteMissPress', [direction]);
 	}
@@ -5205,12 +5242,14 @@ class PlayState extends MusicBeatState
 				var unlock:Bool = false;
 				switch(achievementName)
 				{
-					case 'week1_nomiss' | 'week2_nomiss' | 'week3_nomiss' | 'week4_nomiss' | 'week5_nomiss' | 'week6_nomiss' | 'week7_nomiss':
+					case 'tutorial_nomiss', 'week1_nomiss' | 'week2_nomiss' | 'week3_nomiss' | 'week4_nomiss' | 'week5_nomiss' | 'week6_nomiss' | 'week7_nomiss':
 						if(isStoryMode && campaignMisses + songMisses < 1 && CoolUtil.difficultyString() == 'HARD' && storyPlaylist.length <= 1 && !changedDifficulty && !usedPractice)
 						{
 							var weekName:String = WeekData.getWeekFileName();
 							switch(weekName) //I know this is a lot of duplicated code, but it's easier readable and you can add weeks with different names than the achievement tag
 							{
+								case 'tutorial':
+									if(achievementName == 'tutorial_nomiss') unlock = true;
 								case 'week1':
 									if(achievementName == 'week1_nomiss') unlock = true;
 								case 'week2':

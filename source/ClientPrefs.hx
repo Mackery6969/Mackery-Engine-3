@@ -39,6 +39,7 @@ class ClientPrefs {
 	public static var autoPause:Bool = false;
 	public static var naughtiness:Bool = false;
 	#end
+	public static var freeplayCutscenes:Bool = false;
 	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
@@ -58,7 +59,8 @@ class ClientPrefs {
 		'instakill' => false,
 		'practice' => false,
 		'botplay' => false,
-		'opponentplay' => false
+		//'opponentplay' => false,
+		'fragile funkin' => false
 	];
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];
@@ -138,6 +140,7 @@ class ClientPrefs {
 		FlxG.save.data.pauseMusic = pauseMusic;
 		FlxG.save.data.judgementCounter = judgementCounter;
 		FlxG.save.data.autoPause = autoPause;
+		FlxG.save.data.freeplayCutscenes = freeplayCutscenes;
 		FlxG.save.data.checkForUpdates = checkForUpdates;
 	
 		FlxG.save.flush();
@@ -259,6 +262,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.autoPause != null) {
 			autoPause = FlxG.save.data.autoPause;
+		}
+		if(FlxG.save.data.freeplayCutscenes != null) {
+			freeplayCutscenes = FlxG.save.data.freeplayCutscenes;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{
