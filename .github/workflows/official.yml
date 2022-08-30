@@ -50,7 +50,7 @@ jobs:
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
       - name: Compile
-        run: haxelib run lime build Project.xml linux -official --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build Project.xml linux -officialBuild --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
@@ -92,7 +92,7 @@ jobs:
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
       - name: Compile
-        run: haxelib run lime build windows -official --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build windows -officialBuild --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
@@ -133,7 +133,7 @@ jobs:
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
       - name: Compile
-        run: haxelib run lime build mac -official --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build mac -officialBuild --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
@@ -175,7 +175,7 @@ jobs:
       - name: Create Version Tag
         run: echo "${{github.run_id}}" > VERSION
       - name: Compile
-        run: haxelib run lime build html5 -official --app-version="4.0.0-${{ github.run_id}}"
+        run: haxelib run lime build html5 -officialBuild --app-version="4.0.0-${{ github.run_id}}"
       - name: Publish Artifact
         uses: actions/upload-artifact@v2.2.4
         with:

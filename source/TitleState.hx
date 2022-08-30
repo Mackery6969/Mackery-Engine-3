@@ -666,8 +666,8 @@ class TitleState extends MusicBeatState
 				// credTextShit.text = 'In association \nwith';
 				// credTextShit.screenCenter();
 				case 6:
-					#if official
-					createCoolText(['wow your using the official build'], 15);
+					#if officialBuild
+					createCoolText(['wow your using the officialBuild build'], 15);
 					#else
 					createCoolText(['Enjoy Modding!'], 15);
 					#end

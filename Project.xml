@@ -55,7 +55,7 @@
 	<define name="devBuild" if="desktop debug" /> <!-- USE THIS FOR MODDING!!-->
 
 	<!-- PLEASE DO NOT USE THIS IT WILL FUCK UP THE GAME! (im watching you...) -->
-	<define name="official" />
+	<define name="officialBuild" />
 
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3"  unless="web"/>
