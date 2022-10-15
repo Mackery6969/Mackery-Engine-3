@@ -36,6 +36,10 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private var checkboxGroup:FlxTypedGroup<CheckboxThingie>;
 	private var grpTexts:FlxTypedGroup<AttachedText>;
+	public static var scoreMultiplier:Float = 1; //i had to move this.
+	var selectedMultiplier:Float;
+
+
 
 	function getOptions()
 	{
@@ -46,6 +50,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.scrollSpeed = 1.5;
 		option.minValue = 0.5;
 		option.changeValue = 0.1;
+		option.modifierNum = 0.1;
 		if (goption.getValue() != "constant")
 		{
 			option.displayFormat = '%vX';
@@ -71,6 +76,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.minValue = 0;
 		option.maxValue = 5;
 		option.changeValue = 0.1;
+		option.modifierNum = -0.2;
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
@@ -79,6 +85,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.minValue = 0.5;
 		option.maxValue = 5;
 		option.changeValue = 0.1;
+		option.modifierNum = 0.2;
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
@@ -86,12 +93,48 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		optionsArray.push(option);
 
 		var option:GameplayOption = new GameplayOption('Practice Mode', 'practice', 'bool', false);
+		option.multiplierNum = -999;
 		optionsArray.push(option);
 
 		var option:GameplayOption = new GameplayOption('Botplay', 'botplay', 'bool', false);
+		option.multiplierNum = -999;
 		optionsArray.push(option);
 
 		var option:GameplayOption = new GameplayOption('Fragile Funkin', 'fragile funkin', 'bool', false);
+		optionsArray.push(option);
+
+		var option:GameplayOption = new GameplayOption('Poison Fright', 'degen', 'int', 0);
+		option.scrollSpeed = 10;
+		option.minValue = 0;
+		option.maxValue = 500;
+		option.changeValue = 10;
+		option.multiplierNum = 0.1;
+		option.displayFormat = '%vX';
+		optionsArray.push(option);
+
+		var option:GameplayOption = new GameplayOption('Sup Love', 'sup love', 'int', 0);
+		option.scrollSpeed = 20;
+		option.minValue = 0;
+		option.maxValue = 500;
+		option.changeValue = 10;
+		option.multiplierNum = -0.1;
+		option.displayFormat = '%vX';
+		optionsArray.push(option);
+
+		//for those trying to figure out how this works...
+		//0 is the basic starting health and if it was 1 it would add 1 to the health
+
+		//"but mackery why dont you just make it the actual health as a percent" well idiot, they both cancel eachother out and i dont know how to convert this to a decimal lols.
+		var option:GameplayOption = new GameplayOption('Health', 'starting health', 'float', 0);
+		option.scrollSpeed = 3.5;
+		option.minValue = -0.1;
+		option.maxValue = 1;
+		option.changeValue = 0.1;
+		option.multiplierNum = -0.1;
+		option.displayFormat = '%v';
+		optionsArray.push(option);
+
+		var option:GameplayOption = new GameplayOption('Fair Fight', 'fair fight', 'bool', false);
 		optionsArray.push(option);
 	}
 
@@ -105,6 +148,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 		return null;
 	}
+
+	var multiTxt:FlxText;
 
 	public function new()
 	{
@@ -123,6 +168,12 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		checkboxGroup = new FlxTypedGroup<CheckboxThingie>();
 		add(checkboxGroup);
+
+		multiTxt = new FlxText(800, 60, 0, "", 200);
+		multiTxt.setFormat("assets/fonts/vcr.ttf", 40, FlxColor.WHITE, RIGHT, OUTLINE, FlxColor.BLACK);
+		multiTxt.text = "Multiplier: 1";
+		multiTxt.scrollFactor.set();
+		add(multiTxt);
 		
 		getOptions();
 
@@ -157,6 +208,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		changeSelection();
 		reloadCheckboxes();
+		recalculateMultiplier();
 	}
 
 	var nextAccept:Int = 5;
@@ -194,7 +246,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 					FlxG.sound.play(Paths.sound('scrollMenu'));
 					curOption.setValue((curOption.getValue() == true) ? false : true);
 					curOption.change();
+					recalculateMultiplier();
 					reloadCheckboxes();
+					recalculateMultiplier();
 				}
 			} else {
 				if(controls.UI_LEFT || controls.UI_RIGHT) {
@@ -204,6 +258,13 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 							var add:Dynamic = null;
 							if(curOption.type != 'string') {
 								add = controls.UI_LEFT ? -curOption.changeValue : curOption.changeValue;
+							}
+
+							if (controls.UI_LEFT_P) {
+								selectedMultiplier += curOption.multiplierNum;
+							}
+							else if (controls.UI_RIGHT_P) {
+								selectedMultiplier -= curOption.multiplierNum;
 							}
 
 							switch(curOption.type)
@@ -303,6 +364,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 						updateTextFrom(leOption);
 					}
 
+					scoreMultiplier = 1;
+
 					if(leOption.name == 'Scroll Speed')
 					{
 						leOption.displayFormat = "%vX";
@@ -317,6 +380,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				}
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				reloadCheckboxes();
+				recalculateMultiplier();
 			}
 		}
 
@@ -376,6 +440,11 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			checkbox.daValue = (optionsArray[checkbox.ID].getValue() == true);
 		}
 	}
+	function recalculateMultiplier() {
+		scoreMultiplier += selectedMultiplier;
+
+		multiTxt.text =  "Multiplier: "+ scoreMultiplier;
+	}
 }
 
 class GameplayOption
@@ -390,6 +459,7 @@ class GameplayOption
 
 	public var showBoyfriend:Bool = false;
 	public var scrollSpeed:Float = 50; //Only works on int/float, defines how fast it scrolls per second while holding left/right
+	public var multiplierNum:Float = 1; //how much the score is affected
 
 	private var variable:String = null; //Variable from ClientPrefs.hx's gameplaySettings
 	public var defaultValue:Dynamic = null;
@@ -403,6 +473,8 @@ class GameplayOption
 
 	public var displayFormat:String = '%v'; //How String/Float/Percent/Int values are shown, %v = Current value, %d = Default value
 	public var name:String = 'Unknown';
+	public var modifierNum:Float;
+
 
 	public function new(name:String, variable:String, type:String = 'bool', defaultValue:Dynamic = 'null variable value', ?options:Array<String> = null)
 	{

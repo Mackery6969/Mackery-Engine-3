@@ -83,6 +83,7 @@ class TitleState extends MusicBeatState
 	#end
 
 	var mustUpdate:Bool = false;
+	var chromebookDetector = false;
 
 	var titleJSON:TitleData;
 
@@ -443,7 +444,7 @@ class TitleState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 
-		#if red
+		#if devBuild
 		trace("im a cool dev");
 		#end
 
@@ -516,10 +517,18 @@ class TitleState extends MusicBeatState
 				transitioning = true;
 				// FlxG.sound.music.stop();
 
+				#if CHROMEBOOKWARNING
+				chromebookDetector = true;
+				#else
+				chromebookDetector = false;
+				#end
+
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
 					if (mustUpdate) {
 						MusicBeatState.switchState(new OutdatedState());
+					} else if (chromebookDetector) {
+						MusicBeatState.switchState(new ChromebookWarning());
 					} else {
 						MusicBeatState.switchState(new MainMenuState());
 					}

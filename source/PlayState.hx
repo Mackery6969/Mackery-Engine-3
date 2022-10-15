@@ -139,6 +139,11 @@ class PlayState extends MusicBeatState
 
 	public var spawnTime:Float = 2000;
 
+	//generate a number between 1 and 1000
+	var random:Int;
+	
+	var cheaterSong:String = "cheating";
+
 	public var vocals:FlxSound;
 
 	public var dad:Character = null;
@@ -183,6 +188,7 @@ class PlayState extends MusicBeatState
 	public var goods:Int = 0;
 	public var bads:Int = 0;
 	public var shits:Int = 0;
+	public var total:Int = 0;
 
 	private var generatedMusic:Bool = false;
 	public var endingSong:Bool = false;
@@ -198,8 +204,14 @@ class PlayState extends MusicBeatState
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
 	public var fragileFunkin:Bool = false;
+	public var degen:Int = 0;
+	public var supLove:Int = 0;
+	public var startingHealth:Float = 0;
+	public var fairFight:Bool = false;
 
 	var poisonTimes:Int = 0;
+
+	public var poisonDamage:Float = 0.005;
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
@@ -311,6 +323,8 @@ class PlayState extends MusicBeatState
 	private var controlArray:Array<String>;
 
 	var precacheList:Map<String, String> = new Map<String, String>();
+	var songName:String = "";
+
 
 	override public function create()
 	{
@@ -374,6 +388,10 @@ class PlayState extends MusicBeatState
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
 		fragileFunkin = ClientPrefs.getGameplaySetting('fragile funkin', false);
+		degen = ClientPrefs.getGameplaySetting('degen', 0);
+		supLove = ClientPrefs.getGameplaySetting('sup love', 1);
+		startingHealth = ClientPrefs.getGameplaySetting('starting health', 0);
+		fairFight = ClientPrefs.getGameplaySetting('fair fight', false);
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -1201,7 +1219,7 @@ class PlayState extends MusicBeatState
 			judgementCounter.scrollFactor.set();
 			judgementCounter.cameras = [camHUD];
 			judgementCounter.screenCenter(Y);
-			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\n';//\nTotal hit: ${totals}\n';
+			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\n\nCombo: ${combo}\nTotal Hit: ${total}\n';//\nTotal hit: ${total}\n';
 			add(judgementCounter);
 		}
 
@@ -1269,7 +1287,7 @@ class PlayState extends MusicBeatState
 		var daSong:String = Paths.formatToSongPath(curSong);
 		if (isStoryMode || ClientPrefs.freeplayCutscenes)
 		{
-			if (!seenCutscene) 
+			if (!seenCutscene && !chartingMode) 
 			{
 				switch (daSong)
 				{
@@ -2361,6 +2379,8 @@ class PlayState extends MusicBeatState
 		FlxG.sound.music.onComplete = finishSong.bind();
 		vocals.play();
 
+		health += startingHealth;
+
 		if(startOnTime > 0)
 		{
 			setSongTime(startOnTime - 500);
@@ -2869,6 +2889,13 @@ class PlayState extends MusicBeatState
 		}*/
 		callOnLuas('onUpdate', [elapsed]);
 
+		if (inCutscene) {
+			if (controls.BACK) {
+				inCutscene = false;
+				seenCutscene = true;
+			}
+		}
+
 		switch (curStage)
 		{
 			case 'tank':
@@ -3134,6 +3161,15 @@ class PlayState extends MusicBeatState
 			trace("RESET = True");
 		}
 		doDeathCheck();
+
+		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null) {
+			if (degen > 0) {
+				health -= degen / 700000;
+			}
+			if (supLove > 0) {
+				health += supLove / 700000;
+			}
+		}
 
 		if (unspawnNotes[0] != null)
 		{
@@ -4624,6 +4660,10 @@ class PlayState extends MusicBeatState
 
 		callOnLuas('opponentNoteHit', [notes.members.indexOf(note), Math.abs(note.noteData), note.noteType, note.isSustainNote]);
 
+		if (fairFight) {
+			health -= 0.023;
+		}
+
 		if (!note.isSustainNote)
 		{
 			note.kill();
@@ -4672,6 +4712,7 @@ class PlayState extends MusicBeatState
 
 			if (!note.isSustainNote)
 			{
+				total += 1;
 				combo += 1;
 				if(combo > 9999) combo = 9999;
 				popUpScore(note);
@@ -5226,7 +5267,7 @@ class PlayState extends MusicBeatState
 		setOnLuas('ratingName', ratingName);
 		setOnLuas('ratingFC', ratingFC);
 		if (ClientPrefs.judgementCounter) {
-			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\n';//\nTotal hit: ${totals}\n;
+			judgementCounter.text = 'Sicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\n\nCombo: ${combo}\nTotal Hit: ${total}\n';//\nTotal hit: ${total}\n;
 		}
 	}
 

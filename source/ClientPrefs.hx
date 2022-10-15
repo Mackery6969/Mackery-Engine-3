@@ -60,7 +60,11 @@ class ClientPrefs {
 		'practice' => false,
 		'botplay' => false,
 		//'opponentplay' => false,
-		'fragile funkin' => false
+		'fragile funkin' => false,
+		'degen' => 0,
+		'sup love' => 0,
+		"health" => 0.50,
+		"fair fight" => false
 	];
 
 	public static var comboOffset:Array<Int> = [0, 0, 0, 0];

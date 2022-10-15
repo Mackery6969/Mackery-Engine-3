@@ -172,6 +172,12 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option = new Option('Input Types',
+			'What input type shoukd be used (Kade is best used with Fair Fight)',
+			'input',
+			'string',
+			'Psych Engine'
+			['Psych Engine', 'Kade Engine']);
 		super();
 	}
 
