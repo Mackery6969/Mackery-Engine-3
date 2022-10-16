@@ -176,7 +176,7 @@ class PlayState extends MusicBeatState
 	public var health:Float = 1;
 	public var combo:Int = 0;
 
-	private var healthBarBG:AttachedSprite;
+	private var healthBarBG:FlxSprite;
 	public var healthBar:FlxBar;
 	var songPercent:Float = 0;
 
@@ -1172,13 +1172,21 @@ class PlayState extends MusicBeatState
 		FlxG.fixedTimestep = false;
 		moveCameraSection();
 
-		healthBarBG = new AttachedSprite('healthBar');
-		healthBarBG.y = FlxG.height * 0.89;
+		var healthBarPath = Paths.image('healthBar');
+		switch(ClientPrefs.healthBarType)
+		{
+			case 'Dave':
+				var stupidString = 'healthBarDave';
+				healthBarPath = Paths.image(stupidString);
+			default:
+				var stupidString = 'healthBar';
+				healthBarPath = Paths.image(stupidString);
+		}
+
+		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(healthBarPath); //had to make this more complicated
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		healthBarBG.visible = !ClientPrefs.hideHud;
-		healthBarBG.xAdd = -4;
-		healthBarBG.yAdd = -4;
 		add(healthBarBG);
 		if(ClientPrefs.downScroll) healthBarBG.y = 0.11 * FlxG.height;
 
@@ -1189,7 +1197,7 @@ class PlayState extends MusicBeatState
 		healthBar.visible = !ClientPrefs.hideHud;
 		healthBar.alpha = ClientPrefs.healthBarAlpha;
 		add(healthBar);
-		healthBarBG.sprTracker = healthBar;
+		insert(members.indexOf(healthBarBG), healthBar);
 
 		iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 		iconP1.y = healthBar.y - 75;
