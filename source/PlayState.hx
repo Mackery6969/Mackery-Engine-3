@@ -43,6 +43,10 @@ import openfl.Lib;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.BitmapFilter;
+import Shaders.PulseEffect;
+import Shaders.BlockedGlitchShader;
+import Shaders.BlockedGlitchEffect;
+import Shaders.DitherEffect;
 import openfl.utils.Assets as OpenFlAssets;
 import editors.ChartingState;
 import editors.CharacterEditorState;
@@ -131,6 +135,7 @@ class PlayState extends MusicBeatState
 	public var gfGroup:FlxSpriteGroup;
 	public static var curStage:String = '';
 	public static var isPixelStage:Bool = false;
+	public static var bgshader:String = 'false';
 	public static var SONG:SwagSong = null;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -138,11 +143,6 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 
 	public var spawnTime:Float = 2000;
-
-	//generate a number between 1 and 1000
-	var random:Int;
-	
-	var cheaterSong:String = "cheating";
 
 	public var vocals:FlxSound;
 
@@ -182,6 +182,13 @@ class PlayState extends MusicBeatState
 
 	private var timeBarBG:AttachedSprite;
 	public var timeBar:FlxBar;
+
+	public var curbg:BGSprite;
+	public var pre3dSkin:String;
+	public static var screenshader:Shaders.PulseEffect = new PulseEffect();
+	public static var lazychartshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
+	public static var blockedShader:BlockedGlitchEffect;
+	public var dither:DitherEffect = new DitherEffect();
 
 	public var ratingsData:Array<Rating> = [];
 	public var sicks:Int = 0;
@@ -479,7 +486,9 @@ class PlayState extends MusicBeatState
 				camera_boyfriend: [0, 0],
 				camera_opponent: [0, 0],
 				camera_girlfriend: [0, 0],
-				camera_speed: 1
+				camera_speed: 1,
+
+				bgshader: 'false'
 			};
 		}
 
@@ -835,6 +844,10 @@ class PlayState extends MusicBeatState
 				if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank4', 1300, 900, 1.5, 1.5, ['fg']));
 				foregroundSprites.add(new BGSprite('tank5', 1620, 700, 1.5, 1.5, ['fg']));
 				if(!ClientPrefs.lowQuality) foregroundSprites.add(new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']));
+		}
+
+		if (bgshader != 'false') {
+			voidShader(bgshader);
 		}
 
 		switch(Paths.formatToSongPath(SONG.song))
@@ -2076,6 +2089,19 @@ class PlayState extends MusicBeatState
 				});
 		}
 	}
+
+	function voidShader(background:BGSprite)
+		{
+			if (ClientPrefs.shaders) {
+				var testshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
+				testshader.waveAmplitude = 0.1;
+				testshader.waveFrequency = 5;
+				testshader.waveSpeed = 2;
+				
+				background.shader = testshader.shader;
+			}
+			curbg = background;
+		}
 
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
