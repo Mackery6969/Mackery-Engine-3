@@ -135,7 +135,6 @@ class PlayState extends MusicBeatState
 	public var gfGroup:FlxSpriteGroup;
 	public static var curStage:String = '';
 	public static var isPixelStage:Bool = false;
-	public static var bgshader:String = 'false';
 	public static var SONG:SwagSong = null;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
@@ -182,13 +181,6 @@ class PlayState extends MusicBeatState
 
 	private var timeBarBG:AttachedSprite;
 	public var timeBar:FlxBar;
-
-	public var curbg:BGSprite;
-	public var pre3dSkin:String;
-	public static var screenshader:Shaders.PulseEffect = new PulseEffect();
-	public static var lazychartshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
-	public static var blockedShader:BlockedGlitchEffect;
-	public var dither:DitherEffect = new DitherEffect();
 
 	public var ratingsData:Array<Rating> = [];
 	public var sicks:Int = 0;
@@ -302,6 +294,8 @@ class PlayState extends MusicBeatState
 	public var boyfriendCameraOffset:Array<Float> = null;
 	public var opponentCameraOffset:Array<Float> = null;
 	public var girlfriendCameraOffset:Array<Float> = null;
+
+	public var bgshader:String = 'false';
 
 	#if desktop
 	// Discord RPC variables
@@ -500,6 +494,10 @@ class PlayState extends MusicBeatState
 		GF_Y = stageData.girlfriend[1];
 		DAD_X = stageData.opponent[0];
 		DAD_Y = stageData.opponent[1];
+
+		if(stageData.bgshader != null) {
+			bgshader = stageData.bgshader;
+		}
 
 		if(stageData.camera_speed != null)
 			cameraSpeed = stageData.camera_speed;
@@ -2091,18 +2089,18 @@ class PlayState extends MusicBeatState
 	}
 
 	function voidShader(background:BGSprite)
-		{
-			if (ClientPrefs.shaders) {
-				var testshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
-				testshader.waveAmplitude = 0.1;
-				testshader.waveFrequency = 5;
-				testshader.waveSpeed = 2;
-				
-				background.shader = testshader.shader;
-			}
-			curbg = background;
+	{
+		if (ClientPrefs.shaders) {
+		var testshader:Shaders.GlitchEffect = new Shaders.GlitchEffect();
+		testshader.waveAmplitude = 0.1;
+		testshader.waveFrequency = 5;
+		testshader.waveSpeed = 2;
+		
+		background.shader = testshader.shader;
 		}
-
+		curbg = background;
+	}
+	
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
 
@@ -2425,6 +2423,14 @@ class PlayState extends MusicBeatState
 			//trace('Oopsie doopsie! Paused sound');
 			FlxG.sound.music.pause();
 			vocals.pause();
+		}
+		if (curbg != null)
+		{
+			if (curbg.active && ClientPrefs.shaders) // only the polygonized background is active
+			{
+				var shad = cast(curbg.shader, Shaders.GlitchShader);
+				shad.uTime.value[0] += elapsed;
+			}
 		}
 
 		// Song duration in a float, useful for the time left feature
